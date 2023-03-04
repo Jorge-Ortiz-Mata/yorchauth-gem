@@ -6,6 +6,7 @@ require File.expand_path('../dummy/config/environment', __FILE__)
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
 require 'factory_bot_rails'
+require 'support/shoulda_matchers'
 
 FactoryBot.definition_file_paths << File.join(File.dirname(__FILE__), 'factories')
 # Add additional requires below this line. Rails is not loaded until this point!
@@ -35,6 +36,7 @@ begin
 rescue ActiveRecord::PendingMigrationError => e
   abort e.to_s.strip
 end
+
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"

@@ -6,6 +6,7 @@ FactoryBot.define do
 
     trait :with_password do
       password { "mypassword" }
+      password_confirmation { "mypassword" }
     end
   end
 end
