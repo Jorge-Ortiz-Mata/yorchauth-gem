@@ -1,0 +1,13 @@
+<% if current_page?(signup_path) %>
+  <div>
+    <%= link_to login_path, id: 'login_link' do %>
+      <span>Login</span>
+    <% end %>
+  </div>
+<% elsif current_page?(login_path) %>
+  <div>
+    <%= link_to signup_path, id: 'login_link' do %>
+      <span>Sign Up</span>
+    <% end %>
+  </div>
+<% end %>

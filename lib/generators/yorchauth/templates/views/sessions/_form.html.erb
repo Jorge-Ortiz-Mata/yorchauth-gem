@@ -1,0 +1,15 @@
+<%= form_with(scope: :session, url: login_path, id: 'session_form') do |form| %>
+  <div>
+    <%= form.label :email, 'Email' %>
+    <%= form.email_field :email %>
+  </div>
+
+  <div>
+    <%= form.label :password, 'Password' %>
+    <%= form.password_field :password %>
+  </div>
+
+  <div>
+    <%= form.submit 'Login' %>
+  </div>
+<% end %>
