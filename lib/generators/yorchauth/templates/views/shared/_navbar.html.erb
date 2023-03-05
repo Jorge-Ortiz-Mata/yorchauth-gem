@@ -14,13 +14,13 @@
       </li>
 
       <li>
-        <%= link_to user_path(current_user), id: 'show_user' do %>
+        <%= button_to user_path(current_user.token_id), method: :get, id: 'show_user' do %>
           Profile
         <% end %>
       </li>
 
       <li>
-        <%= link_to edit_user_path(current_user), id: 'edit_user' do %>
+        <%= button_to edit_user_path(current_user.token_id), method: :get, id: 'edit_user' do %>
           Edit Account
         <% end %>
       </li>

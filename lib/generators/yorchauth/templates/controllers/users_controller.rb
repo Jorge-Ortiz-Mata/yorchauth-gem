@@ -47,7 +47,8 @@ class UsersController < AuthenticateController
   end
 
   def set_user
-    @user = User.find(params[:id])
+    @user = User.find_by(token_id: params[:token_id])
+    redirect_to root_path, notice: 'No user found' if @user.nil?
   end
 
   def authorize_user
