@@ -1,0 +1,10 @@
+<%= render 'form', { user: @user, text_btn: 'Update account' } %>
+<%= link_to :back, id: 'cancel_btn' do %>
+  Cancel
+<% end %>
+<div>
+  <p>Danger zone:</p>
+  <%= button_to user_path(@user), method: :delete, id: 'cancel_account', form: { data: { turbo_confirm: '¿Estás seguro de inhabilitar este registro?' } } do %>
+    Cancel Account
+  <% end %>
+</div>

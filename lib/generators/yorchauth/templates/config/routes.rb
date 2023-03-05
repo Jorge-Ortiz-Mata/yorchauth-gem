@@ -1,6 +1,6 @@
 # User Authentication routes.
 
-resources :users, only: %i[create edit update]
+resources :users, except: %i[new]
 get '/signup', to: 'users#new'
 get '/login', to: 'sessions#new'
 post '/login', to: 'sessions#create'

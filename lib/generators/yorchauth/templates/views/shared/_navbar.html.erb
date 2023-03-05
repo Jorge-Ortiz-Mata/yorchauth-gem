@@ -1,0 +1,42 @@
+<nav>
+  <ul>
+    <% if current_user %>
+      <li>
+        <%= link_to root_path, id: 'root_path' do %>
+          My app
+        <% end %>
+      </li>
+
+      <li>
+        <%= button_to logout_path, method: :delete, id: 'close_session' do %>
+          Log out
+        <% end %>
+      </li>
+
+      <li>
+        <%= link_to user_path(current_user), id: 'show_user' do %>
+          Profile
+        <% end %>
+      </li>
+
+      <li>
+        <%= link_to edit_user_path(current_user), id: 'edit_user' do %>
+          Edit Account
+        <% end %>
+      </li>
+
+    <% else %>
+      <li>
+        <%= link_to login_path, id: 'login_navbar_link' do %>
+          Login
+        <% end %>
+      </li>
+
+      <li>
+        <%= link_to signup_path, id: 'signup_navbar_link' do %>
+          Sign Up
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</nav>
