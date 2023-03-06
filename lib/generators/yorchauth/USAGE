@@ -1,8 +1,7 @@
-Description:
-    Explain the generator
+The yorchauth auth gem generates several files. Depending on the options passed, it will generate different files.
+Options accepted:
+  - User
+  - Profile
 
-Example:
-    bin/rails generate yorchauth Thing
-
-    This will create:
-        what/will/it/create
+Example: rails g yorchauth User
+You can find more information at: https://github.com/Jorge-Ortiz-Mata/yorchauth-ruby-gem

@@ -1,27 +1,20 @@
-require_relative './actions/user_methods'
-require_relative './actions/profile_methods'
-
 class YorchauthGenerator < Rails::Generators::NamedBase
+  # desc 'You can pass several options such as user, profile and more. You can see more about it in the official documentation'
   source_root File.expand_path("templates", __dir__)
+  class_option :module, type: :string
 
   def action_generator
-    case file_name
-    when 'user'
+    if @name.downcase.eql? 'user'
       user_authentication
-    when 'profile'
-      profile_association
     else
-      puts 'You type a wrong paramater'
+      p 'Wrong parameter. Try with: rails g yorchauth user'
     end
   end
 
   private
 
   def user_authentication
-    UserFiles.generate_user_files
-  end
-
-  def profile_association
-    ProfileFiles.generate_profile_files
+    directory './app/controllers/', 'app/controllers/' # Copy the controllers folder.
+    copy_file './app/mailers/user_mailer.rb', 'app/mailers/user_mailer.rb' # Copy the user_mailer.rb file.
   end
 end
