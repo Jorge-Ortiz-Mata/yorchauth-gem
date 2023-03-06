@@ -1,6 +1,6 @@
 class UsersController < AuthenticateController
-  skip_before_action :authenticate_user, only: %i[new create]
-  before_action :set_user, only: %i[edit update show destroy]
+  skip_before_action :authenticate_user, only: %i[new create confirm_account]
+  before_action :set_user, only: %i[edit update show destroy confirm_account]
   before_action :authorize_user, only: %i[edit update destroy]
 
   def new
@@ -15,8 +15,8 @@ class UsersController < AuthenticateController
     @user = User.new user_params
 
     if @user.save
-      session[:user_id] = @user.id
-      redirect_to root_path
+      UserMailer.with(user: @user).send_email_confirmation.deliver_later
+      redirect_to login_path, notice: 'An email has been sent to your email account. Click on the link to validate your account.'
     else
       render :new, status: :unprocessable_entity
     end
@@ -38,6 +38,19 @@ class UsersController < AuthenticateController
     session[:user_id] = nil
     @user.destroy
     redirect_to login_path, notice: 'Your account has been deleted successfully'
+  end
+
+  def confirm_account
+    if @user.present?
+      if @user.confirmed?
+        redirect_to login_path, notice: 'You have already confirmed your email account'
+      else
+        @user.update!(active: true)
+        redirect_to login_path, notice: 'Your account has been successfully confirmed'
+      end
+    else
+      redirect_to login_path, notice: 'No user found'
+    end
   end
 
   private

@@ -7,10 +7,14 @@ class SessionsController < AuthenticateController
 
   def create
     if @user&.authenticate(params[:session][:password])
-      session[:user_id] = @user.id
-      redirect_to root_path
+      if @user.confirmed?
+        session[:user_id] = @user.id
+        redirect_to root_path
+      else
+        redirect_to login_path, notice: 'Your account has not been activated.'
+      end
     else
-      flash[:notice] = 'Email or password wrong'
+      flash[:notice] = 'Incorrect email or password.'
       render :new, status: :unprocessable_entity
     end
   end
