@@ -25,12 +25,12 @@ class UsersController < AuthenticateController
   def update
     if @user.authenticate(params[:user][:old_password])
       if @user.update user_params
-        redirect_to user_path(@user), notice: 'Account updated successfully'
+        redirect_to user_path(@user.token_id), notice: 'Account updated successfully'
       else
-        render :new, status: :unprocessable_entity
+        render :edit, status: :unprocessable_entity
       end
     else
-      redirect_to edit_user_path(@user), notice: 'Your current password is invalid'
+      redirect_to edit_user_path(@user.token_id), notice: 'Your current password is invalid'
     end
   end
 
@@ -49,7 +49,7 @@ class UsersController < AuthenticateController
         redirect_to login_path, notice: 'Your account has been successfully confirmed'
       end
     else
-      redirect_to login_path, notice: 'No user found'
+      redirect_to login_path, notice: 'You can not confirm this account because it is not linked to any user.'
     end
   end
 
@@ -61,7 +61,7 @@ class UsersController < AuthenticateController
 
   def set_user
     @user = User.find_by(token_id: params[:token_id])
-    redirect_to root_path, notice: 'No user found' if @user.nil?
+    redirect_to root_path, notice: 'No user found' unless @user.present?
   end
 
   def authorize_user

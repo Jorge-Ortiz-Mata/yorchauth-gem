@@ -1,4 +1,4 @@
-<%= form_with(model: user, id: 'user_form') do |form| %>
+<%= form_with(model: user, id: 'user_form', url: url) do |form| %>
   <% if user.errors.any? %>
     <ul>
       <% user.errors.each do |error| %>
@@ -22,7 +22,7 @@
     <%= form.password_field :password_confirmation %>
   </div>
 
-  <% unless current_page?(signup_path) %>
+  <% if authorize %>
     <div>
       <%= form.label :old_password, 'Please type your old password to change your profile:' %>
       <%= form.password_field :old_password  %>

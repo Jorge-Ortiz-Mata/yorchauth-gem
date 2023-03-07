@@ -1,10 +1,11 @@
-<%= render 'form', { user: @user, text_btn: 'Update account' } %>
+<%= render 'form', { user: @user, text_btn: 'Update account', url: update_user_path(@user.token_id), authorize: true } %>
+
 <%= link_to :back, id: 'cancel_btn' do %>
   Cancel
 <% end %>
 <div>
   <p>Danger zone:</p>
-  <%= button_to user_path(@user), method: :delete, id: 'cancel_account', form: { data: { turbo_confirm: '¿Estás seguro de inhabilitar este registro?' } } do %>
+  <%= button_to destroy_user_path, method: :delete, id: 'cancel_account', form: { data: { turbo_confirm: '¿Estás seguro de inhabilitar este registro?' } } do %>
     Cancel Account
   <% end %>
 </div>
