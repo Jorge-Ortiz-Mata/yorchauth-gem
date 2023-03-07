@@ -2,7 +2,8 @@ require 'rails_helper'
 
 module Yorchauth
   RSpec.describe User, type: :model do
-    let(:user) { create :yorchauth_user, :with_email, :with_long_password, :as_active }
+    let(:valid_user) { build :yorchauth_user, :with_email, :with_long_password, :as_active }
+    let(:invalid_user) { build :yorchauth_user, :with_email, :with_short_password }
 
     describe 'validations' do
       it { should have_secure_password }
@@ -18,7 +19,17 @@ module Yorchauth
 
     describe 'instance' do
       it 'should be valid' do
-        expect(user).to be_valid
+        expect(valid_user).to be_valid
+      end
+
+      it 'should not be valid' do
+        expect(invalid_user).to_not be_valid
+      end
+    end
+
+    describe 'custom methods' do
+      it 'should return true when user account is active' do
+        expect(valid_user.confirmed?).to be_truthy
       end
     end
   end

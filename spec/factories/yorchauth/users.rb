@@ -15,7 +15,7 @@ FactoryBot.define do
     end
 
     trait :as_active do
-      active { true}
+      active { true }
     end
   end
 end
