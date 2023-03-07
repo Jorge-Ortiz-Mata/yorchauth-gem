@@ -1,4 +1,5 @@
 Yorchauth::Engine.routes.draw do
+  root 'pages#index'
   # User Authentication routes.
   resources :users, only: %i[create]
   get '/signup', to: 'users#new'

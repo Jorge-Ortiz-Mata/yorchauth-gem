@@ -22,14 +22,14 @@ module Yorchauth
     let(:valid_params) { { email: 'user@email.com', password: '123password', password_confirmation: '123password', active: true } }
     let(:invalid_params) { { email: '', password: 's8s', password_confirmation: 'm91' } }
 
-    # describe "GET /show" do
-    #   it "renders a successful response" do
-    #     user = User.create! valid_params
-
-    #     get user_path(user.token_id)
-    #     expect(response).to be_succes
-    #   end
-    # end
+    describe "GET /show" do
+      it "renders a successful response" do
+        user = User.create! valid_params
+        post login_path, params: { session: { email: 'user@email.com', password: '123password' } }
+        get user_path(user.token_id)
+        expect(response).to be_successful
+      end
+    end
 
     # describe "GET /new" do
     #   it "renders a successful response" do
