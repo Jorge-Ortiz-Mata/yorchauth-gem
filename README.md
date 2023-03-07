@@ -21,13 +21,39 @@ $ bundle install
 
 You can see the help documentation by running the following command: `rails g yorchauth --help`. It's not necessary to do it but it'll give you some information about how you can use this gem.
 
-1. Copy the ruby gem into your project, in the Gemfile and then run `bundle install`.
-2. Generate the User Authentication using this command: `rails g yorchauth user`. It generates controllers, models, views, migration, routes and a short configuration for Sendgrid in the **config/environments/development.rb** file.
-3. Run `bundle install` because it uses couple of gems: **bcrypt** and **dot-env**
+1. Copy the ruby gem into your project, in the Gemfile and then run:
+
+```bash
+$ bundle install
+```
+
+2. Generate the User Authentication using this command:
+
+```bash
+$ rails g yorchauth user
+```
+
+It generates controllers, models, views, migration, routes and a short configuration for Sendgrid in the **config/environments/development.rb** file.
+
+3. The Yorchauth gem uses two gems: **bcrypt** and **dot-env**. So you will need to install these gems. Run the next command:
+
+```bash
+$ bundle install
+```
+
 4. Add your SENDGRID Keys into the **.env** file generated. For example:
+
+```
   - SENDGRID_EMAIL_VALID='myuser@email.com'
   - SENDGRID_API_KEY='ALL_YOUR_API_KEY'
-5. Run the following command: `rails db:migrate` to create the users table.
+```
+
+5. Run the following command to create the users table:
+
+```bash
+$ rails db:migrate
+```
+
 6. And finally, each controller you have will inherit from **AuthenticateController**.
 
 ```ruby
