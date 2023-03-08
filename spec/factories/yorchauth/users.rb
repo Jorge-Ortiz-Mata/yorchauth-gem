@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :yorchauth_user, class: 'Yorchauth::User' do
     trait :with_email do
-      email { "user@example.com" }
+      email { "user@email.com" }
     end
 
     trait :with_short_password do
@@ -10,8 +10,8 @@ FactoryBot.define do
     end
 
     trait :with_long_password do
-      password { "password268" }
-      password_confirmation { "password268" }
+      password { "123password" }
+      password_confirmation { "123password" }
     end
 
     trait :as_active do
