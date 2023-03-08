@@ -22,105 +22,51 @@ module Yorchauth
     let(:valid_params) { { email: 'user@email.com', password: '123password', password_confirmation: '123password', active: true } }
     let(:invalid_params) { { email: '', password: 's8s', password_confirmation: 'm91' } }
 
-    describe "GET /show" do
-      it "renders a successful response" do
-        user = User.create! valid_params
-        post login_path, params: { session: { email: 'user@email.com', password: '123password' } }
-        get user_path(user.token_id)
-        expect(response).to be_successful
+    context 'as the same user' do
+      describe "POST /users/create" do
+        it 'can create a new account' do
+          post users_path, params: { user: valid_params }
+
+          expect(response).to be_successful
+        end
+      end
+
+      describe "GET /users/:token_id" do
+        it "returns success when visiting profile page" do
+          user = User.create! valid_params
+          post login_path, params: { session: { email: 'user@email.com', password: '123password' } }
+          get user_path(user.token_id)
+
+          expect(response).to be_successful
+        end
+      end
+
+      describe "GET /signup" do
+        it "renders a successful response when users are registering" do
+          get signup_path
+
+          expect(response).to be_successful
+        end
+      end
+
+      describe "GET /users/edit/:token_id" do
+        it 'return success when editing account' do
+          user = User.create! valid_params
+          post login_path, params: { session: { email: 'user@email.com', password: '123password' } }
+          get edit_user_path(user.token_id)
+
+          expect(response).to be_successful
+        end
+      end
+
+      describe 'PATCH /users/edit/:token_id' do
+        it 'can update user atributtes and update a record' do
+          user = User.create! valid_params
+          post login_path, params: { session: { email: 'user@email.com', password: '123password' } }
+          patch update_user_path(user.token_id), params: { user: { email: 'new@email.com', old_password: '123password' } }
+          expect(response).to be_successful
+        end
       end
     end
-
-    # describe "GET /new" do
-    #   it "renders a successful response" do
-    #     get new_user_url
-    #     expect(response).to be_successful
-    #   end
-    # end
-
-    # describe "GET /edit" do
-    #   it "renders a successful response" do
-    #     user = User.create! valid_attributes
-    #     get edit_user_url(user)
-    #     expect(response).to be_successful
-    #   end
-    # end
-
-    # describe "POST /create" do
-    #   context "with valid parameters" do
-    #     it "creates a new User" do
-    #       expect {
-    #         post users_url, params: { user: valid_attributes }
-    #       }.to change(User, :count).by(1)
-    #     end
-
-    #     it "redirects to the created user" do
-    #       post users_url, params: { user: valid_attributes }
-    #       expect(response).to redirect_to(user_url(User.last))
-    #     end
-    #   end
-
-    #   context "with invalid parameters" do
-    #     it "does not create a new User" do
-    #       expect {
-    #         post users_url, params: { user: invalid_attributes }
-    #       }.to change(User, :count).by(0)
-    #     end
-
-
-    #     it "renders a response with 422 status (i.e. to display the 'new' template)" do
-    #       post users_url, params: { user: invalid_attributes }
-    #       expect(response).to have_http_status(:unprocessable_entity)
-    #     end
-
-    #   end
-    # end
-
-    # describe "PATCH /update" do
-    #   context "with valid parameters" do
-    #     let(:new_attributes) {
-    #       skip("Add a hash of attributes valid for your model")
-    #     }
-
-    #     it "updates the requested user" do
-    #       user = User.create! valid_attributes
-    #       patch user_url(user), params: { user: new_attributes }
-    #       user.reload
-    #       skip("Add assertions for updated state")
-    #     end
-
-    #     it "redirects to the user" do
-    #       user = User.create! valid_attributes
-    #       patch user_url(user), params: { user: new_attributes }
-    #       user.reload
-    #       expect(response).to redirect_to(user_url(user))
-    #     end
-    #   end
-
-    #   context "with invalid parameters" do
-
-    #     it "renders a response with 422 status (i.e. to display the 'edit' template)" do
-    #       user = User.create! valid_attributes
-    #       patch user_url(user), params: { user: invalid_attributes }
-    #       expect(response).to have_http_status(:unprocessable_entity)
-    #     end
-
-    #   end
-    # end
-
-    # describe "DELETE /destroy" do
-    #   it "destroys the requested user" do
-    #     user = User.create! valid_attributes
-    #     expect {
-    #       delete user_url(user)
-    #     }.to change(User, :count).by(-1)
-    #   end
-
-    #   it "redirects to the users list" do
-    #     user = User.create! valid_attributes
-    #     delete user_url(user)
-    #     expect(response).to redirect_to(users_url)
-    #   end
-    # end
   end
 end
