@@ -31,19 +31,19 @@ module Yorchauth
         end
       end
 
-      describe "GET /users/:token_id" do
-        it "returns success when visiting profile page" do
-          user = User.create! valid_params
-          post login_path, params: { session: { email: 'user@email.com', password: '123password' } }
-          get user_path(user.token_id)
+      describe "GET /signup" do
+        it "renders a successful response when users are registering" do
+          get signup_path
 
           expect(response).to be_successful
         end
       end
 
-      describe "GET /signup" do
-        it "renders a successful response when users are registering" do
-          get signup_path
+      describe "GET /users/:token_id" do
+        it "returns success when visiting profile page" do
+          user = User.create! valid_params
+          post login_path, params: { session: { email: 'user@email.com', password: '123password' } }
+          get user_path(user.token_id)
 
           expect(response).to be_successful
         end
@@ -65,6 +65,17 @@ module Yorchauth
           post login_path, params: { session: { email: 'user@email.com', password: '123password' } }
           patch update_user_path(user.token_id), params: { user: { email: 'new@email.com', old_password: '123password' } }
           expect(response).to be_successful
+        end
+      end
+
+      describe 'DELETE /users/destroy/:token_id' do
+        it 'can cancel and delete their account' do
+          user = User.create! valid_params
+          post login_path, params: { session: { email: 'user@email.com', password: '123password' } }
+          delete destroy_user_path(user.token_id)
+
+          expect(response).to be_successful
+          expect(User.all.count).to be 0
         end
       end
     end
