@@ -53,7 +53,7 @@ module Yorchauth
       describe "GET /users/:token_id" do
         it "returns success when visiting profile page" do
           user_active.reload
-          post login_path, params: { session: { email: 'user@email.com', password: '123password' } }
+          post login_path, params: { session: valid_params }
           get user_path(user_active.token_id)
 
           expect(response).to have_http_status(200)
@@ -61,7 +61,7 @@ module Yorchauth
 
         it "returns not found when looking for a user with an unknow token" do
           user_active.reload
-          post login_path, params: { session: { email: 'user@email.com', password: '123password' } }
+          post login_path, params: { session: valid_params }
           get user_path('OTHERTOKEN24')
 
           expect(response).to have_http_status(404)
@@ -71,7 +71,7 @@ module Yorchauth
       describe "GET /users/edit/:token_id" do
         it 'return success when editing account' do
           user_active.reload
-          post login_path, params: { session: { email: 'user@email.com', password: '123password' } }
+          post login_path, params: { session: valid_params }
           get edit_user_path(user_active.token_id)
 
           expect(response).to have_http_status(200)
@@ -80,7 +80,7 @@ module Yorchauth
         it 'returns not authorized when editing anotjer user' do
           user_active.reload
           user2 = User.create! valid_params2
-          post login_path, params: { session: { email: 'user@email.com', password: '123password' } }
+          post login_path, params: { session: valid_params }
           get edit_user_path(user2.token_id)
 
           expect(response).to have_http_status(401)
@@ -90,21 +90,21 @@ module Yorchauth
       describe 'PATCH /users/edit/:token_id' do
         it 'can update user atributtes and update a record' do
           user_active.reload
-          post login_path, params: { session: { email: 'user@email.com', password: '123password' } }
+          post login_path, params: { session: valid_params }
           patch update_user_path(user_active.token_id), params: { user: { email: 'new@email.com', old_password: '123password' } }
           expect(response).to have_http_status(200)
         end
 
         it 'returns unprocessable entity when password is wrong' do
           user_active.reload
-          post login_path, params: { session: { email: 'user@email.com', password: '123password' } }
+          post login_path, params: { session: valid_params }
           patch update_user_path(user_active.token_id), params: { user: { email: 'new@email.com', old_password: '122password' } }
           expect(response).to have_http_status(422)
         end
 
         it 'returns unprocessable entity when params are not valid' do
           user_active.reload
-          post login_path, params: { session: { email: 'user@email.com', password: '123password' } }
+          post login_path, params: { session: valid_params }
           patch update_user_path(user_active.token_id), params: { user: { email: 'new@email.com', old_password: '122password', password: '1327bs', password_confirmation: '28bfdh' } }
           expect(response).to have_http_status(422)
         end
@@ -113,7 +113,7 @@ module Yorchauth
       describe 'DELETE /users/destroy/:token_id' do
         it 'can cancel and delete their account' do
           user_active.reload
-          post login_path, params: { session: { email: 'user@email.com', password: '123password' } }
+          post login_path, params: { session: valid_params }
           delete destroy_user_path(user_active.token_id)
 
           expect(response).to have_http_status(200)

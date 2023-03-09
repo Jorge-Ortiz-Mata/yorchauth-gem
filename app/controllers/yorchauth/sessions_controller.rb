@@ -13,7 +13,7 @@ module Yorchauth
           redirect_to root_path, status: :ok
         else
           flash[:notice] = 'Your account has not been activated.'
-          redirect_to login_path, status: :unprocessable_entity
+          redirect_to login_path, status: :unauthorized
         end
       else
         flash[:notice] = 'Incorrect email or password.'
