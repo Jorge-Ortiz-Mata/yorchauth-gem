@@ -15,9 +15,9 @@ class UsersController < AuthenticateController
     @user = User.new user_params
 
     if @user.save
-      Yorchauth::UserMailer.with(user: @user).send_email_confirmation.deliver_later
+      UserMailer.with(user: @user).send_email_confirmation.deliver_later
       flash[:notice] = 'An email has been sent to your email account. Click on the link to validate your account.'
-      redirect_to login_path, status: :ok
+      redirect_to login_path
     else
       render :new, status: :unprocessable_entity
     end
@@ -27,7 +27,7 @@ class UsersController < AuthenticateController
     if @user.authenticate(params[:user][:old_password])
       if @user.update user_params
         flash[:notice] = 'Account updated successfully'
-        redirect_to user_path(@user.token_id), status: :ok
+        redirect_to user_path(@user.token_id)
       else
         render :edit, status: :unprocessable_entity
       end
@@ -42,7 +42,7 @@ class UsersController < AuthenticateController
     @user.destroy
 
     flash[:notice] = 'Your account has been deleted successfully'
-    redirect_to login_path, status: :ok
+    redirect_to login_path
   end
 
   def confirm_account
@@ -53,11 +53,10 @@ class UsersController < AuthenticateController
         @user.update!(active: true)
         flash[:notice] = 'Your account has been successfully confirmed'
       end
-      redirect_to login_path, status: :ok
     else
       flash[:notice] = 'You can not confirm this account because it is not linked to any user.'
-      redirect_to login_path, status: :not_found
     end
+    redirect_to login_path
   end
 
   private
@@ -71,13 +70,13 @@ class UsersController < AuthenticateController
     return @user if @user.present?
 
     flash[:notice] = 'There is not user with this token'
-    redirect_to root_path, status: :not_found
+    redirect_to root_path
   end
 
   def authorize_user
     return if current_user.eql? @user
 
     flash[:notice] = "You are not authorized to perform this action"
-    redirect_to root_path, status: :unauthorized
+    redirect_to root_path
   end
 end

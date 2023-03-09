@@ -18,7 +18,9 @@ module Yorchauth
     end
 
     def deny_access
-      redirect_to root_path unless session[:user_id].nil?
+      return if session[:user_id].nil?
+
+      redirect_to root_path, notice: 'You cannot access. Please sign out.'
     end
   end
 end

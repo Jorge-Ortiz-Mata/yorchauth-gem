@@ -10,10 +10,10 @@ module Yorchauth
       if @user&.authenticate(params[:session][:password])
         if @user.confirmed?
           session[:user_id] = @user.id
-          redirect_to root_path, status: :ok
+          redirect_to root_path
         else
           flash[:notice] = 'Your account has not been activated.'
-          redirect_to login_path, status: :unauthorized
+          redirect_to login_path
         end
       else
         flash[:notice] = 'Incorrect email or password.'
@@ -23,7 +23,7 @@ module Yorchauth
 
     def logout
       session[:user_id] = nil
-      redirect_to login_path, status: :ok
+      redirect_to login_path
     end
 
     private

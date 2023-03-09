@@ -1,4 +1,7 @@
 require 'rails_helper'
 
-RSpec.describe "Authenticate", type: :request do
+module Yorchauth
+  RSpec.describe "AuthenticateController", type: :request do
+    include Engine.routes.url_helpers
+  end
 end
