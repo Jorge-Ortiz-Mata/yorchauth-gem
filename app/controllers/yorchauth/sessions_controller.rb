@@ -23,7 +23,7 @@ module Yorchauth
 
     def logout
       session[:user_id] = nil
-      redirect_to login_path
+      redirect_to login_path, status: :ok
     end
 
     private

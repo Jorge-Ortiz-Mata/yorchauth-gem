@@ -19,7 +19,8 @@ module Yorchauth
     # This should return the minimal set of attributes required to create a valid
     # User. As you add validations to User, be sure to
     # adjust the attributes here as well.
-    let(:valid_user) { create :yorchauth_user, :with_email, :with_long_password }
+    let(:user_active) { create :yorchauth_user, :with_email, :with_long_password, :as_active }
+    let(:user_deactived) { create :yorchauth_user, :with_email, :with_long_password }
 
     let(:valid_params) { { email: 'user@email.com', password: '123password', password_confirmation: '123password', active: true } }
     let(:valid_params2) { { email: 'user2@email.com', password: '123password', password_confirmation: '123password', active: true } }
@@ -51,15 +52,15 @@ module Yorchauth
 
       describe "GET /users/:token_id" do
         it "returns success when visiting profile page" do
-          user = User.create! valid_params
+          user_active.reload
           post login_path, params: { session: { email: 'user@email.com', password: '123password' } }
-          get user_path(user.token_id)
+          get user_path(user_active.token_id)
 
           expect(response).to have_http_status(200)
         end
 
         it "returns not found when looking for a user with an unknow token" do
-          user = User.create! valid_params
+          user_active.reload
           post login_path, params: { session: { email: 'user@email.com', password: '123password' } }
           get user_path('OTHERTOKEN24')
 
@@ -69,15 +70,15 @@ module Yorchauth
 
       describe "GET /users/edit/:token_id" do
         it 'return success when editing account' do
-          user = User.create! valid_params
+          user_active.reload
           post login_path, params: { session: { email: 'user@email.com', password: '123password' } }
-          get edit_user_path(user.token_id)
+          get edit_user_path(user_active.token_id)
 
           expect(response).to have_http_status(200)
         end
 
         it 'returns not authorized when editing anotjer user' do
-          user = User.create! valid_params
+          user_active.reload
           user2 = User.create! valid_params2
           post login_path, params: { session: { email: 'user@email.com', password: '123password' } }
           get edit_user_path(user2.token_id)
@@ -88,32 +89,32 @@ module Yorchauth
 
       describe 'PATCH /users/edit/:token_id' do
         it 'can update user atributtes and update a record' do
-          user = User.create! valid_params
+          user_active.reload
           post login_path, params: { session: { email: 'user@email.com', password: '123password' } }
-          patch update_user_path(user.token_id), params: { user: { email: 'new@email.com', old_password: '123password' } }
+          patch update_user_path(user_active.token_id), params: { user: { email: 'new@email.com', old_password: '123password' } }
           expect(response).to have_http_status(200)
         end
 
         it 'returns unprocessable entity when password is wrong' do
-          user = User.create! valid_params
+          user_active.reload
           post login_path, params: { session: { email: 'user@email.com', password: '123password' } }
-          patch update_user_path(user.token_id), params: { user: { email: 'new@email.com', old_password: '122password' } }
+          patch update_user_path(user_active.token_id), params: { user: { email: 'new@email.com', old_password: '122password' } }
           expect(response).to have_http_status(422)
         end
 
         it 'returns unprocessable entity when params are not valid' do
-          user = User.create! valid_params
+          user_active.reload
           post login_path, params: { session: { email: 'user@email.com', password: '123password' } }
-          patch update_user_path(user.token_id), params: { user: { email: 'new@email.com', old_password: '122password', password: '1327bs', password_confirmation: '28bfdh' } }
+          patch update_user_path(user_active.token_id), params: { user: { email: 'new@email.com', old_password: '122password', password: '1327bs', password_confirmation: '28bfdh' } }
           expect(response).to have_http_status(422)
         end
       end
 
       describe 'DELETE /users/destroy/:token_id' do
         it 'can cancel and delete their account' do
-          user = User.create! valid_params
+          user_active.reload
           post login_path, params: { session: { email: 'user@email.com', password: '123password' } }
-          delete destroy_user_path(user.token_id)
+          delete destroy_user_path(user_active.token_id)
 
           expect(response).to have_http_status(200)
           expect(User.all.count).to be 0
@@ -122,7 +123,7 @@ module Yorchauth
 
       describe 'GET /email/confirmation/:token_id' do
         it 'can confirm their account' do
-          valid_user.reload
+          user_deactived.reload
           expect(User.last.active).to be false
           get confirm_user_account_path(User.last.token_id)
 
