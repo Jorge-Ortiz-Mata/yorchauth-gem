@@ -19,117 +19,117 @@ module Yorchauth
     # This should return the minimal set of attributes required to create a valid
     # User. As you add validations to User, be sure to
     # adjust the attributes here as well.
-  #   let(:user_active) { create :yorchauth_user, :with_email, :with_long_password, :as_active }
-  #   let(:user_deactived) { create :yorchauth_user, :with_email, :with_long_password }
+    let(:user_active) { create :yorchauth_user, :with_email, :with_long_password, :as_active }
+    let(:user_deactived) { create :yorchauth_user, :with_email, :with_long_password }
 
-  #   let(:valid_params) { { email: 'user@email.com', password: '123password', password_confirmation: '123password', active: true } }
-  #   let(:valid_params2) { { email: 'user2@email.com', password: '123password', password_confirmation: '123password', active: true } }
-  #   let(:invalid_params) { { email: '', password: 's8s', password_confirmation: 'm91' } }
+    let(:valid_params) { { email: 'user@email.com', password: '123password', password_confirmation: '123password', active: true } }
+    let(:valid_params2) { { email: 'user2@email.com', password: '123password', password_confirmation: '123password', active: true } }
+    let(:invalid_params) { { email: '', password: 's8s', password_confirmation: 'm91' } }
 
-  #   context 'as the same user' do
-  #     describe "POST /users/create" do
-  #       it 'can not create account with invalid params' do
-  #         post users_path, params: { user: invalid_params }
+    context 'as the same user' do
+      describe "POST /users/create" do
+        it 'can not create account with invalid params' do
+          post users_path, params: { user: invalid_params }
 
-  #         expect(response).to_not have_http_status(200)
-  #         expect(response).to have_http_status(422)
-  #       end
+          expect(response).to_not have_http_status(200)
+          expect(response).to have_http_status(422)
+        end
 
-  #       it 'can create a new account' do
-  #         post users_path, params: { user: valid_params }
+        it 'can create a new account' do
+          post users_path, params: { user: valid_params }
 
-  #         expect(response).to have_http_status(200)
-  #       end
-  #     end
+          expect(response).to have_http_status(200)
+        end
+      end
 
-  #     describe "GET /signup" do
-  #       it "renders a successful response when users are registering" do
-  #         get signup_path
+      describe "GET /signup" do
+        it "renders a successful response when users are registering" do
+          get signup_path
 
-  #         expect(response).to have_http_status(200)
-  #       end
-  #     end
+          expect(response).to have_http_status(200)
+        end
+      end
 
-  #     describe "GET /users/:token_id" do
-  #       it "returns success when visiting profile page" do
-  #         user_active.reload
-  #         post login_path, params: { session: valid_params }
-  #         get user_path(user_active.token_id)
+      describe "GET /users/:token_id" do
+        it "returns success when visiting profile page" do
+          user_active.reload
+          post login_path, params: { session: valid_params }
+          get user_path(user_active.token_id)
 
-  #         expect(response).to have_http_status(200)
-  #       end
+          expect(response).to have_http_status(200)
+        end
 
-  #       it "returns not found when looking for a user with an unknow token" do
-  #         user_active.reload
-  #         post login_path, params: { session: valid_params }
-  #         get user_path('OTHERTOKEN24')
+        it "returns not found when looking for a user with an unknow token" do
+          user_active.reload
+          post login_path, params: { session: valid_params }
+          get user_path('OTHERTOKEN24')
 
-  #         expect(response).to have_http_status(404)
-  #       end
-  #     end
+          expect(response).to have_http_status(404)
+        end
+      end
 
-  #     describe "GET /users/edit/:token_id" do
-  #       it 'return success when editing account' do
-  #         user_active.reload
-  #         post login_path, params: { session: valid_params }
-  #         get edit_user_path(user_active.token_id)
+      describe "GET /users/edit/:token_id" do
+        it 'return success when editing account' do
+          user_active.reload
+          post login_path, params: { session: valid_params }
+          get edit_user_path(user_active.token_id)
 
-  #         expect(response).to have_http_status(200)
-  #       end
+          expect(response).to have_http_status(200)
+        end
 
-  #       it 'returns not authorized when editing anotjer user' do
-  #         user_active.reload
-  #         user2 = User.create! valid_params2
-  #         post login_path, params: { session: valid_params }
-  #         get edit_user_path(user2.token_id)
+        it 'returns not authorized when editing anotjer user' do
+          user_active.reload
+          user2 = User.create! valid_params2
+          post login_path, params: { session: valid_params }
+          get edit_user_path(user2.token_id)
 
-  #         expect(response).to have_http_status(401)
-  #       end
-  #     end
+          expect(response).to have_http_status(401)
+        end
+      end
 
-  #     describe 'PATCH /users/edit/:token_id' do
-  #       it 'can update user atributtes and update a record' do
-  #         user_active.reload
-  #         post login_path, params: { session: valid_params }
-  #         patch update_user_path(user_active.token_id), params: { user: { email: 'new@email.com', old_password: '123password' } }
-  #         expect(response).to have_http_status(200)
-  #       end
+      describe 'PATCH /users/edit/:token_id' do
+        it 'can update user atributtes and update a record' do
+          user_active.reload
+          post login_path, params: { session: valid_params }
+          patch update_user_path(user_active.token_id), params: { user: { email: 'new@email.com', old_password: '123password' } }
+          expect(response).to have_http_status(200)
+        end
 
-  #       it 'returns unprocessable entity when password is wrong' do
-  #         user_active.reload
-  #         post login_path, params: { session: valid_params }
-  #         patch update_user_path(user_active.token_id), params: { user: { email: 'new@email.com', old_password: '122password' } }
-  #         expect(response).to have_http_status(422)
-  #       end
+        it 'returns unprocessable entity when password is wrong' do
+          user_active.reload
+          post login_path, params: { session: valid_params }
+          patch update_user_path(user_active.token_id), params: { user: { email: 'new@email.com', old_password: '122password' } }
+          expect(response).to have_http_status(422)
+        end
 
-  #       it 'returns unprocessable entity when params are not valid' do
-  #         user_active.reload
-  #         post login_path, params: { session: valid_params }
-  #         patch update_user_path(user_active.token_id), params: { user: { email: 'new@email.com', old_password: '122password', password: '1327bs', password_confirmation: '28bfdh' } }
-  #         expect(response).to have_http_status(422)
-  #       end
-  #     end
+        it 'returns unprocessable entity when params are not valid' do
+          user_active.reload
+          post login_path, params: { session: valid_params }
+          patch update_user_path(user_active.token_id), params: { user: { email: 'new@email.com', old_password: '122password', password: '1327bs', password_confirmation: '28bfdh' } }
+          expect(response).to have_http_status(422)
+        end
+      end
 
-  #     describe 'DELETE /users/destroy/:token_id' do
-  #       it 'can cancel and delete their account' do
-  #         user_active.reload
-  #         post login_path, params: { session: valid_params }
-  #         delete destroy_user_path(user_active.token_id)
+      describe 'DELETE /users/destroy/:token_id' do
+        it 'can cancel and delete their account' do
+          user_active.reload
+          post login_path, params: { session: valid_params }
+          delete destroy_user_path(user_active.token_id)
 
-  #         expect(response).to have_http_status(200)
-  #         expect(User.all.count).to be 0
-  #       end
-  #     end
+          expect(response).to have_http_status(200)
+          expect(User.all.count).to be 0
+        end
+      end
 
-  #     describe 'GET /email/confirmation/:token_id' do
-  #       it 'can confirm their account' do
-  #         user_deactived.reload
-  #         expect(User.last.active).to be false
-  #         get confirm_user_account_path(User.last.token_id)
+      describe 'GET /email/confirmation/:token_id' do
+        it 'can confirm their account' do
+          user_deactived.reload
+          expect(User.last.active).to be false
+          get confirm_user_account_path(User.last.token_id)
 
-  #         expect(response).to have_http_status(200)
-  #       end
-  #     end
-  #   end
+          expect(response).to have_http_status(200)
+        end
+      end
+    end
   end
 end

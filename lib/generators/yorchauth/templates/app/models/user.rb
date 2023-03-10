@@ -9,10 +9,4 @@ class User < ApplicationRecord
   def confirmed?
     active
   end
-
-  private
-
-  def password_present?
-    false || password.present?
-  end
 end

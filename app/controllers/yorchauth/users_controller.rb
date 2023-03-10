@@ -1,6 +1,7 @@
 module Yorchauth
   class UsersController < AuthenticateController
     skip_before_action :authenticate_user, only: %i[new create confirm_account]
+    before_action :deny_access, only: %i[new create]
     before_action :set_user, only: %i[edit update show destroy confirm_account]
     before_action :authorize_user, only: %i[edit update destroy]
 
@@ -18,7 +19,7 @@ module Yorchauth
       if @user.save
         Yorchauth::UserMailer.with(user: @user).send_email_confirmation.deliver_later
         flash[:notice] = 'An email has been sent to your email account. Click on the link to validate your account.'
-        redirect_to login_path
+        redirect_to login_path, status: :ok
       else
         render :new, status: :unprocessable_entity
       end
@@ -28,7 +29,7 @@ module Yorchauth
       if @user.authenticate(params[:user][:old_password])
         if @user.update user_params
           flash[:notice] = 'Account updated successfully'
-          redirect_to user_path(@user.token_id)
+          redirect_to user_path(@user.token_id), status: :ok
         else
           render :edit, status: :unprocessable_entity
         end
@@ -43,7 +44,7 @@ module Yorchauth
       @user.destroy
 
       flash[:notice] = 'Your account has been deleted successfully'
-      redirect_to login_path
+      redirect_to login_path, status: :ok
     end
 
     def confirm_account
@@ -57,7 +58,7 @@ module Yorchauth
       else
         flash[:notice] = 'You can not confirm this account because it is not linked to any user.'
       end
-      redirect_to login_path
+      redirect_to login_path, status: :ok
     end
 
     private
@@ -71,14 +72,14 @@ module Yorchauth
       return @user if @user.present?
 
       flash[:notice] = 'There is not user with this token'
-      redirect_to root_path
+      redirect_to root_path, status: :not_found
     end
 
     def authorize_user
       return if current_user.eql? @user
 
       flash[:notice] = "You are not authorized to perform this action"
-      redirect_to root_path
+      redirect_to root_path, status: :unauthorized
     end
   end
 end

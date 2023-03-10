@@ -14,13 +14,17 @@ module Yorchauth
     private
 
     def authenticate_user
-      redirect_to login_path, notice: 'Please, sign in to use this application' unless logged_in?
+      return if logged_in?
+
+      flash[:notice] = 'Please, sign in to use this application'
+      redirect_to login_path, status: :unauthorized
     end
 
     def deny_access
       return if session[:user_id].nil?
 
-      redirect_to root_path, notice: 'You cannot access. Please sign out.'
+      flash[:notice] = 'You cannot access. Please sign out.'
+      redirect_to root_path, status: :unauthorized
     end
   end
 end

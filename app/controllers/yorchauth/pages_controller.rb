@@ -1,6 +1,7 @@
 module Yorchauth
-  class PagesController < ApplicationController
-    def index
-    end
+  class PagesController < AuthenticateController
+    before_action :authenticate_user
+
+    def index; end
   end
 end

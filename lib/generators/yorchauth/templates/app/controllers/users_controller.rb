@@ -1,5 +1,6 @@
 class UsersController < AuthenticateController
   skip_before_action :authenticate_user, only: %i[new create confirm_account]
+  before_action :deny_access, only: %i[new create]
   before_action :set_user, only: %i[edit update show destroy confirm_account]
   before_action :authorize_user, only: %i[edit update destroy]
 
