@@ -9,7 +9,7 @@ Besides, it adds the Sendgrid Configuration in the config/development.rb file. Y
 Add the yorchauth gem in your Gemfile.
 
 ```ruby
-gem "yorchauth", github: 'Jorge-Ortiz-Mata/yorchauth-ruby-gem'
+gem "yorchauth", github: 'Jorge-Ortiz-Mata/yorchauth-gem'
 ```
 
 And then execute:
