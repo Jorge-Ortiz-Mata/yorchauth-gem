@@ -58,10 +58,8 @@ $ rails db:migrate
 
 ```ruby
 class PagesController < AuthenticateController
-    before_action :authenticate_user
-
-    def index; end
-  end
+  def index; end
+end
 ```
 
 7. Don't forget to add your API Keys into your .gitignore file and enjoy!
