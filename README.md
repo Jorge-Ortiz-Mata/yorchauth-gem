@@ -9,7 +9,7 @@ Besides, it adds the Sendgrid Configuration in the config/development.rb file. Y
 Add the yorchauth gem in your Gemfile.
 
 ```ruby
-gem "yorchauth", github: 'Jorge-Ortiz-Mata/yorchauth-ruby-gem'
+gem "yorchauth", github: 'Jorge-Ortiz-Mata/yorchauth-gem'
 ```
 
 And then execute:
@@ -58,10 +58,8 @@ $ rails db:migrate
 
 ```ruby
 class PagesController < AuthenticateController
-    before_action :authenticate_user
-
-    def index; end
-  end
+  def index; end
+end
 ```
 
 7. Don't forget to add your API Keys into your .gitignore file and enjoy!
