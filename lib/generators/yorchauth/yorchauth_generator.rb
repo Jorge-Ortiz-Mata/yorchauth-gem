@@ -1,6 +1,6 @@
 class YorchauthGenerator < Rails::Generators::NamedBase
   # desc 'You can pass several options such as user, profile and more. You can see more about it in the official documentation'
-  source_root File.expand_path("templates", __dir__)
+  source_root File.expand_path('templates', __dir__)
   class_option :module, type: :string
 
   def action_generator
