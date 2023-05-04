@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe "users/show", type: :view do
-  pending "add some examples to (or delete) #{__FILE__}"
   # before(:each) do
   #   assign(:user, User.create!(
   #     email: "Email",

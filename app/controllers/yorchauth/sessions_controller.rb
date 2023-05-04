@@ -17,7 +17,7 @@ module Yorchauth
         end
       else
         flash[:notice] = 'Incorrect email or password.'
-        render :new, status: :unprocessable_entity
+        redirect_to login_path, status: :unprocessable_entity
       end
     end
 
